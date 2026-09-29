@@ -27,7 +27,7 @@ class PrivacyGuardApp:
         self.owner_feature = None
         self.enrolling = False
         self.enroll_samples = []
-        self.enroll_target = 20
+        self.enroll_target = 12
 
         self.status = tk.StringVar(value="Starting camera…")
         self.identity_status = tk.StringVar(value="OWNER: NOT ENROLLED")
@@ -127,7 +127,7 @@ class PrivacyGuardApp:
             return
         self.enrolling = True
         self.enroll_samples = []
-        self.identity_status.set("OWNER: ENROLLING • LOOK AT CAMERA")
+        self.identity_status.set("OWNER: ENROLLING 0/12 • LOOK AT CAMERA")
         self.status.set("Enrollment started • keep one face centered and steady")
 
     def finish_enrollment(self):
@@ -166,10 +166,16 @@ class PrivacyGuardApp:
                 try:
                     feature = self.identity.embedding(frame, faces[0])
                     self.enroll_samples.append(feature)
+                    self.identity_status.set(
+                        f"OWNER: ENROLLING {len(self.enroll_samples)}/{self.enroll_target} • KEEP STEADY"
+                    )
+                    self.status.set(
+                        f"Collecting owner face samples • {len(self.enroll_samples)}/{self.enroll_target}"
+                    )
                     if len(self.enroll_samples) >= self.enroll_target:
                         self.finish_enrollment()
-                except Exception:
-                    pass
+                except Exception as exc:
+                    self.status.set(f"Enrollment sample error: {exc}")
 
         if not self.enrolling and self.owner_feature is not None and self.identity:
             for face in faces:
