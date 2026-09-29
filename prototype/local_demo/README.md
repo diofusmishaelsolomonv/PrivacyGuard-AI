@@ -1,43 +1,106 @@
-# PrivacyGuard AI — Local Working Demo
+# PrivacyGuard AI — Automatic Local Face Recognition Demo
 
-This folder contains the first runnable proof-of-concept of PrivacyGuard AI.
+This is the runnable local proof-of-concept of PrivacyGuard AI.
 
-## Demonstrates
+## What is automatic now?
 
-- Live webcam face detection with OpenCV
-- Local sensitive-content rules
-- Context-aware privacy decision engine
-- Authorized/unknown demo state
-- Shoulder-surfing rule using face count
-- Adaptive actions: ALLOW, CONTROLLED ALLOW, MASK, LOCK
-- No cloud API required
+On first run, the user performs a one-time **Owner Enrollment**.
 
-## Run
+After that, the camera automatically:
+
+1. Detects every visible face.
+2. Extracts a local face embedding.
+3. Compares each face against the enrolled owner template.
+4. Labels the context as **OWNER**, **UNKNOWN**, **OWNER + UNKNOWN**, or **NO FACE**.
+5. Feeds that identity context into the privacy engine.
+
+There is no manual **Authorized user** checkbox in the recognition flow.
+
+### Important
+
+A computer cannot know who its owner is without an enrollment reference. The one-time enrollment creates a local owner template; recognition after that is automatic.
+
+## Setup
+
+From this directory:
 
 ```powershell
-cd prototype/local_demo
 python -m venv .venv
+Set-ExecutionPolicy -Scope Process Bypass
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
+python download_models.py
 python app.py
 ```
 
-If PowerShell blocks activation:
+The model downloader retrieves the YuNet face detector and SFace face-recognition model from the OpenCV Model Zoo. The model files are ignored by Git and stay on the local machine.
 
-```powershell
-Set-ExecutionPolicy -Scope Process Bypass
+## Owner enrollment
+
+1. Start the application.
+2. Click **ENROLL / RE-ENROLL OWNER**.
+3. Look at the camera with one face visible.
+4. Keep your face reasonably centered and steady while samples are collected.
+5. When enrollment finishes, the status becomes **OWNER: ENROLLED • AUTO RECOGNITION ON**.
+
+The owner template is saved locally at:
+
+```text
+data/owner_embedding.npy
 ```
 
-## Demo flow
+It is intentionally ignored by Git because it is biometric data.
 
-1. Allow camera access.
-2. Keep **Authorized user** enabled.
-3. Use the default OTP text.
-4. The engine should show **CONTROLLED ALLOW**.
-5. Turn off **Authorized user** → sensitive OTP becomes **MASK**.
-6. Try `password: secret123` → highly sensitive content becomes **LOCK** for an unknown user.
-7. Put a second face in the camera view → sensitive content can trigger **MASK**.
+## Automatic scenarios
 
-### Honest prototype boundary
+### Owner + sensitive content
 
-This is a local proof-of-concept, not the final Snapdragon implementation. It uses OpenCV Haar Cascade for face detection and a lightweight local rule engine for content detection. It does not yet claim biometric identity verification or Qualcomm AI Hub acceleration.
+```text
+OWNER
+  +
+OTP
+  ↓
+CONTROLLED ALLOW
+```
+
+### Unknown person + sensitive content
+
+```text
+UNKNOWN
+  +
+OTP
+  ↓
+MASK
+```
+
+### Unknown person + highly sensitive content
+
+```text
+UNKNOWN
+  +
+PASSWORD / ID
+  ↓
+LOCK
+```
+
+### Owner + second unknown viewer
+
+```text
+OWNER + UNKNOWN
+  +
+SENSITIVE CONTENT
+  ↓
+MASK
+```
+
+## Recognition model
+
+The prototype uses **YuNet** for face detection and **SFace** for face-feature extraction and matching. OpenCV documents a cosine similarity threshold of 0.363 for its SFace example; this project starts with that value and treats it as a demo threshold rather than a security guarantee. citeturn2search6turn2search0
+
+## Privacy boundary
+
+All recognition is intended to run locally in this prototype. No face image or owner template is sent to a cloud API.
+
+This is a local proof-of-concept, not a production biometric security system. Lighting, pose, camera quality and threshold selection can affect recognition results.
+
+The next deployment stage is to map the same identity/content/risk pipeline to Snapdragon on-device AI.
