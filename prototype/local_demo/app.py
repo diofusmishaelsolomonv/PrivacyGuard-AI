@@ -8,6 +8,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 from privacy_engine import decide
 from sensitive_detector import detect
+from camera_detector import detect_faces
 
 class PrivacyGuardApp:
     def __init__(self, root):
@@ -80,7 +81,7 @@ class PrivacyGuardApp:
         tk.Label(right, text="WHO → WHAT → RISK → ACTION", fg="#F4F7FB",
                  bg="#0E1928", font=("Segoe UI", 14, "bold")).pack(anchor="w", padx=20)
         tk.Label(right,
-                 text="Camera face count is used for the local shoulder-surfing demo. "
+                 text="The local demo uses face count for the shoulder-surfing scenario. "
                       "The prototype does not claim biometric identity verification yet.",
                  fg="#A9B8C9", bg="#0E1928", font=("Segoe UI", 8),
                  wraplength=360, justify="left").pack(anchor="w", padx=20, pady=(8, 0))
@@ -92,11 +93,12 @@ class PrivacyGuardApp:
             self.root.after(300, self.update_frame)
             return
 
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        cascade = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
-        faces = cv2.CascadeClassifier(cascade).detectMultiScale(
-            gray, 1.2, 5, minSize=(70, 70)
-        )
+        try:
+            faces = detect_faces(frame)
+        except Exception as exc:
+            self.status.set(f"Face detector error: {exc}")
+            faces = []
+
         self.face_count = len(faces)
 
         for (x, y, w, h) in faces:
