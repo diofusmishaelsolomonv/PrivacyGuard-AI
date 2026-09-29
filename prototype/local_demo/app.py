@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import cv2
 from PIL import Image, ImageTk
+from screen_scanner import scan_screen
 from pathlib import Path
 import sys
 import numpy as np
@@ -37,6 +38,7 @@ class PrivacyGuardApp:
         self.score = tk.StringVar(value="—")
         self.demo_text = tk.StringVar(value="OTP verification code: 482913")
         self.protected_text = tk.StringVar(value="OTP verification code: 482913")
+        self.screen_status = tk.StringVar(value="Screen scan: not run")
 
         try:
             self.identity = FaceIdentity(BASE / "models")
@@ -117,6 +119,13 @@ class PrivacyGuardApp:
                  fg="#718096", bg="#0E1928", font=("Segoe UI", 8),
                  wraplength=365, justify="left").pack(anchor="w", padx=20, pady=(4, 8))
 
+        tk.Button(right, text="SCAN CURRENT SCREEN (OCR)", command=self.scan_current_screen,
+                  bg="#1677FF", fg="white", activebackground="#125FCF",
+                  activeforeground="white", relief="flat",
+                  font=("Segoe UI", 10, "bold"), padx=10, pady=8).pack(fill="x", padx=20, pady=(2, 6))
+        tk.Label(right, textvariable=self.screen_status, fg="#A9B8C9", bg="#0E1928",
+                 font=("Segoe UI", 8), wraplength=365, justify="left").pack(anchor="w", padx=20, pady=(0, 8))
+
         tk.Label(right, text="DECISION PIPELINE", fg="#FF3347", bg="#0E1928",
                  font=("Segoe UI", 13, "bold")).pack(anchor="w", padx=20, pady=(8, 6))
         tk.Label(right, text="WHO → WHAT → CONTEXT → RISK → ACTION",
@@ -126,6 +135,23 @@ class PrivacyGuardApp:
                       "No face image is uploaded to a cloud service.",
                  fg="#A9B8C9", bg="#0E1928", font=("Segoe UI", 8),
                  wraplength=365, justify="left").pack(anchor="w", padx=20, pady=(8, 0))
+
+    def scan_current_screen(self):
+        try:
+            image, text, hits, sensitive, highly = scan_screen()
+            if not text:
+                self.screen_status.set("Screen scan: no readable text detected")
+                return
+            self.demo_text.set(text[:300])
+            self.screen_status.set(
+                f"Screen OCR: {len(text)} chars • Sensitive: {', '.join(hits) if hits else 'none'}"
+            )
+            if hits:
+                self.protected_text.set("••••••••••••  [SENSITIVE CONTENT DETECTED]")
+            else:
+                self.protected_text.set(text[:300])
+        except Exception as exc:
+            self.screen_status.set(f"Screen OCR error: {exc}")
 
     def start_enrollment(self):
         if self.identity is None:
