@@ -85,7 +85,7 @@ class PrivacyGuardApp:
             tk.Label(right, text=label, fg="#55D6FF", bg="#0E1928",
                      font=("Segoe UI", 10, "bold")).pack(anchor="w", padx=20, pady=(12, 2))
             tk.Label(right, textvariable=var, fg="#F4F7FB", bg="#0E1928",
-                     font=("Segoe UI", 9.5), wraplength=365, justify="left").pack(anchor="w", padx=20)
+                     font=("Segoe UI", 9), wraplength=365, justify="left").pack(anchor="w", padx=20)
 
         ttk.Separator(right).pack(fill="x", padx=20, pady=14)
 
