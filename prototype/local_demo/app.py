@@ -1,14 +1,15 @@
+import sys
+from pathlib import Path
+
+BASE = Path(__file__).parent
+sys.path.insert(0, str(BASE / "src"))
+
 import tkinter as tk
 from tkinter import ttk, messagebox
 import cv2
 from PIL import Image, ImageTk
 from screen_scanner import scan_screen
-from pathlib import Path
-import sys
 import numpy as np
-
-BASE = Path(__file__).parent
-sys.path.insert(0, str(BASE / "src"))
 
 from privacy_engine import decide
 from sensitive_detector import detect
