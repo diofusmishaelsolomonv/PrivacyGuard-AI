@@ -14,7 +14,7 @@ and maps them to an adaptive response:
 
 **ALLOW → WARN → MASK → BLUR → LOCK**
 
-![PrivacyGuard AI architecture](assets/architecture.png)
+![PrivacyGuard AI architecture](assets/architecture.svg)
 
 ---
 
@@ -144,7 +144,7 @@ PrivacyGuard-AI/
 ├── LICENSE
 ├── .gitignore
 ├── assets/
-│   └── architecture.png
+│   └── architecture.svg
 ├── docs/
 │   ├── architecture.md
 │   └── project-brief.md
@@ -152,8 +152,9 @@ PrivacyGuard-AI/
 │   └── README.md
 ├── src/
 │   └── README.md
-└── submission/
-    └── README.md
+├── submission/
+│   └── README.md
+└── PROJECT_STATUS.md
 ```
 
 ---
