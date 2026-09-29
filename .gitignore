@@ -27,3 +27,9 @@ dist/
 .env
 .env.*
 !.env.example
+
+# Local AI model weights
+prototype/local_demo/models/*.onnx
+
+# Local owner biometric template
+prototype/local_demo/data/
