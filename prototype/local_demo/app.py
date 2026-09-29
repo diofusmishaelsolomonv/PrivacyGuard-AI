@@ -101,10 +101,36 @@ class PrivacyGuardApp:
         right_canvas.pack(side="left", fill="both", expand=True)
         right_scrollbar.pack(side="right", fill="y")
 
-        def _mousewheel(event):
-            right_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        # Robust Windows mouse-wheel scrolling: only scroll when the pointer
+        # is over the right control panel, and keep the canvas focused.
+        def _enter_scroll(event=None):
+            right_canvas.focus_set()
 
-        right_canvas.bind_all("<MouseWheel>", _mousewheel)
+        def _mousewheel(event):
+            if event.delta:
+                right_canvas.yview_scroll(-int(event.delta / 120), "units")
+
+        def _mousewheel_up(event):
+            right_canvas.yview_scroll(-3, "units")
+
+        def _mousewheel_down(event):
+            right_canvas.yview_scroll(3, "units")
+
+        right_canvas.bind("<Enter>", _enter_scroll)
+        right.bind("<Enter>", _enter_scroll)
+        right_canvas.bind("<MouseWheel>", _mousewheel)
+        right.bind("<MouseWheel>", _mousewheel)
+        right_canvas.bind("<Button-4>", _mousewheel_up)
+        right_canvas.bind("<Button-5>", _mousewheel_down)
+        right.bind("<Button-4>", _mousewheel_up)
+        right.bind("<Button-5>", _mousewheel_down)
+        right_canvas.bind("<Prior>", lambda e: right_canvas.yview_scroll(-8, "units"))
+        right_canvas.bind("<Next>", lambda e: right_canvas.yview_scroll(8, "units"))
+        right_canvas.bind("<Home>", lambda e: right_canvas.yview_moveto(0))
+        right_canvas.bind("<End>", lambda e: right_canvas.yview_moveto(1))
+
+        # Recalculate after all widgets have been laid out.
+        self.root.after_idle(_update_scroll_region)
 
         self.video_label = tk.Label(left, bg="#05080E")
         self.video_label.pack(fill="both", expand=True, padx=12, pady=12)
