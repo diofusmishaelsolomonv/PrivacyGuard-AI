@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#070B14"/><stop offset="100%" stop-color="#0E1928"/></linearGradient>
+  <linearGradient id="red" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#FF3347"/><stop offset="100%" stop-color="#FF5A68"/></linearGradient>
+  <filter id="shadow"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity=".28"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L10,3 L0,6 Z" fill="#55D6FF"/></marker>
+</defs>
+<rect width="1400" height="760" rx="28" fill="url(#bg)"/>
+<rect x="0" y="0" width="1400" height="10" fill="url(#red)"/>
+<text x="70" y="72" fill="#F4F7FB" font-family="Arial,sans-serif" font-size="34" font-weight="700">PrivacyGuard AI</text>
+<text x="70" y="108" fill="#A9B8C9" font-family="Arial,sans-serif" font-size="18">Adaptive On-Device Privacy Firewall for Snapdragon PCs</text>
+<text x="70" y="150" fill="#55D6FF" font-family="Arial,sans-serif" font-size="18" font-weight="700">WHO + WHAT + CONTEXT + RISK → ACTION</text>
+
+<g filter="url(#shadow)">
+<rect x="80" y="205" width="260" height="125" rx="18" fill="#101F31" stroke="#263A52"/>
+<text x="210" y="250" text-anchor="middle" fill="#FF3347" font-family="Arial" font-size="21" font-weight="700">CAMERA</text>
+<text x="210" y="282" text-anchor="middle" fill="#F4F7FB" font-family="Arial" font-size="17">Identity context</text>
+<text x="210" y="307" text-anchor="middle" fill="#A9B8C9" font-family="Arial" font-size="14">Face / viewer detection</text>
+</g>
+<g filter="url(#shadow)">
+<rect x="80" y="380" width="260" height="125" rx="18" fill="#101F31" stroke="#263A52"/>
+<text x="210" y="425" text-anchor="middle" fill="#FF3347" font-family="Arial" font-size="21" font-weight="700">SCREEN</text>
+<text x="210" y="457" text-anchor="middle" fill="#F4F7FB" font-family="Arial" font-size="17">Content context</text>
+<text x="210" y="482" text-anchor="middle" fill="#A9B8C9" font-family="Arial" font-size="14">Sensitive region detection</text>
+</g>
+
+<line x1="340" y1="267" x2="485" y2="335" stroke="#55D6FF" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="340" y1="443" x2="485" y2="375" stroke="#55D6FF" stroke-width="4" marker-end="url(#arrow)"/>
+
+<g filter="url(#shadow)">
+<rect x="485" y="275" width="330" height="165" rx="22" fill="#0E1928" stroke="#55D6FF" stroke-width="2"/>
+<text x="650" y="325" text-anchor="middle" fill="#55D6FF" font-family="Arial" font-size="22" font-weight="700">PRIVACY RISK ENGINE</text>
+<text x="650" y="360" text-anchor="middle" fill="#F4F7FB" font-family="Arial" font-size="17">Identity + Content + Context</text>
+<text x="650" y="391" text-anchor="middle" fill="#A9B8C9" font-family="Arial" font-size="15">Risk assessment &amp; policy decision</text>
+<text x="650" y="420" text-anchor="middle" fill="#FF3347" font-family="Arial" font-size="15" font-weight="700">Local / On-device decision layer</text>
+</g>
+
+<line x1="815" y1="357" x2="930" y2="357" stroke="#55D6FF" stroke-width="4" marker-end="url(#arrow)"/>
+
+<g filter="url(#shadow)">
+<rect x="930" y="205" width="360" height="305" rx="22" fill="#101F31" stroke="#263A52"/>
+<text x="1110" y="250" text-anchor="middle" fill="#F4F7FB" font-family="Arial" font-size="21" font-weight="700">ADAPTIVE PROTECTION</text>
+<rect x="970" y="275" width="280" height="38" rx="10" fill="#16273A"/><text x="1110" y="301" text-anchor="middle" fill="#F4F7FB" font-family="Arial" font-size="16" font-weight="700">ALLOW</text>
+<rect x="970" y="325" width="280" height="38" rx="10" fill="#16273A"/><text x="1110" y="351" text-anchor="middle" fill="#F4F7FB" font-family="Arial" font-size="16" font-weight="700">WARN</text>
+<rect x="970" y="375" width="280" height="38" rx="10" fill="#16273A"/><text x="1110" y="401" text-anchor="middle" fill="#F4F7FB" font-family="Arial" font-size="16" font-weight="700">MASK / BLUR</text>
+<rect x="970" y="425" width="280" height="38" rx="10" fill="#16273A"/><text x="1110" y="451" text-anchor="middle" fill="#FF3347" font-family="Arial" font-size="16" font-weight="700">LOCK</text>
+</g>
+
+<g filter="url(#shadow)">
+<rect x="260" y="585" width="880" height="105" rx="20" fill="#0E1928" stroke="#263A52"/>
+<text x="700" y="625" text-anchor="middle" fill="#55D6FF" font-family="Arial" font-size="18" font-weight="700">TARGET SNAPDRAGON DEPLOYMENT</text>
+<text x="700" y="656" text-anchor="middle" fill="#A9B8C9" font-family="Arial" font-size="16">On-device AI → local privacy decision → protected screen → privacy event log</text>
+</g>
+</svg>
