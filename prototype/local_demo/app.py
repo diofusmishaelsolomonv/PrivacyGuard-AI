@@ -68,9 +68,43 @@ class PrivacyGuardApp:
         left = tk.Frame(main, bg="#0E1928", highlightbackground="#263A52", highlightthickness=1)
         left.pack(side="left", fill="both", expand=True, padx=(0, 10))
 
-        right = tk.Frame(main, bg="#0E1928", width=420, highlightbackground="#263A52", highlightthickness=1)
-        right.pack(side="right", fill="y")
-        right.pack_propagate(False)
+        # Scrollable right control panel so all controls remain accessible on smaller screens.
+        right_container = tk.Frame(
+            main, bg="#0E1928", width=440,
+            highlightbackground="#263A52", highlightthickness=1
+        )
+        right_container.pack(side="right", fill="y")
+        right_container.pack_propagate(False)
+
+        right_canvas = tk.Canvas(
+            right_container, bg="#0E1928", highlightthickness=0, bd=0
+        )
+        right_scrollbar = ttk.Scrollbar(
+            right_container, orient="vertical", command=right_canvas.yview
+        )
+        right = tk.Frame(right_canvas, bg="#0E1928")
+
+        right_window = right_canvas.create_window(
+            (0, 0), window=right, anchor="nw"
+        )
+        right_canvas.configure(yscrollcommand=right_scrollbar.set)
+
+        def _update_scroll_region(event=None):
+            right_canvas.configure(scrollregion=right_canvas.bbox("all"))
+
+        def _fit_panel_width(event):
+            right_canvas.itemconfigure(right_window, width=event.width)
+
+        right.bind("<Configure>", _update_scroll_region)
+        right_canvas.bind("<Configure>", _fit_panel_width)
+
+        right_canvas.pack(side="left", fill="both", expand=True)
+        right_scrollbar.pack(side="right", fill="y")
+
+        def _mousewheel(event):
+            right_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+        right_canvas.bind_all("<MouseWheel>", _mousewheel)
 
         self.video_label = tk.Label(left, bg="#05080E")
         self.video_label.pack(fill="both", expand=True, padx=12, pady=12)
