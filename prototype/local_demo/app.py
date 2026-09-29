@@ -36,6 +36,7 @@ class PrivacyGuardApp:
         self.reason = tk.StringVar(value="—")
         self.score = tk.StringVar(value="—")
         self.demo_text = tk.StringVar(value="OTP verification code: 482913")
+        self.protected_text = tk.StringVar(value="OTP verification code: 482913")
 
         try:
             self.identity = FaceIdentity(BASE / "models")
@@ -102,14 +103,19 @@ class PrivacyGuardApp:
                  fg="#A9B8C9", bg="#0E1928", font=("Segoe UI", 8),
                  wraplength=365, justify="left").pack(anchor="w", padx=20, pady=(7, 8))
 
-        tk.Label(right, text="DEMO SCREEN CONTENT", fg="#55D6FF", bg="#0E1928",
+        tk.Label(right, text="PROTECTED SCREEN PREVIEW", fg="#55D6FF", bg="#0E1928",
                  font=("Segoe UI", 10, "bold")).pack(anchor="w", padx=20, pady=(8, 4))
         entry = tk.Entry(right, textvariable=self.demo_text, bg="#16273A",
                          fg="#F4F7FB", insertbackground="#F4F7FB", relief="flat",
                          font=("Segoe UI", 10))
         entry.pack(fill="x", padx=20, ipady=8)
-        tk.Label(right, text="Try: OTP / password / Aadhaar / confidential",
-                 fg="#718096", bg="#0E1928", font=("Segoe UI", 8)).pack(anchor="w", padx=20, pady=(4, 8))
+        tk.Label(right, textvariable=self.protected_text, bg="#16273A",
+                 fg="#F4F7FB", font=("Segoe UI", 11, "bold"),
+                 anchor="w", padx=10, pady=8, wraplength=365,
+                 justify="left").pack(fill="x", padx=20, pady=(6, 0))
+        tk.Label(right, text="Enter sample data above. Unknown/second face → sensitive text is masked.",
+                 fg="#718096", bg="#0E1928", font=("Segoe UI", 8),
+                 wraplength=365, justify="left").pack(anchor="w", padx=20, pady=(4, 8))
 
         tk.Label(right, text="DECISION PIPELINE", fg="#FF3347", bg="#0E1928",
                  font=("Segoe UI", 13, "bold")).pack(anchor="w", padx=20, pady=(8, 6))
@@ -223,6 +229,10 @@ class PrivacyGuardApp:
 
         self.decision.set(d.action.value)
         self.risk.set(d.risk)
+        if d.action.value in ("MASK", "LOCK"):
+            self.protected_text.set("••••••••••••  [SENSITIVE CONTENT MASKED]")
+        else:
+            self.protected_text.set(self.demo_text.get())
         self.reason.set(
             f"{identity_label} • {d.reason}"
             + (f" • cosine={best_score:.3f}" if best_score is not None else "")
